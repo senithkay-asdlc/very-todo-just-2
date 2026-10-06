@@ -1,0 +1,4 @@
+apiVersion = "agentic-engineer/v1"
+name = "very-todo-just-2"
+createdAt = "2026-10-06T06:07:01Z"
+idea = "a very simple todo app with just todo add and todo done. with auth and database. very simple"
