@@ -1,0 +1,31 @@
+{
+  "version": 3,
+  "permissions": [
+    {
+      "resource": "todos",
+      "component": "todo-api",
+      "description": "A user's own todos",
+      "actions": [
+        { "handle": "read", "description": "The caller's own todos" },
+        { "handle": "create", "description": "Add a todo for the caller" },
+        { "handle": "complete", "description": "Mark the caller's todo done" }
+      ]
+    }
+  ],
+  "groups": [
+    { "name": "Todo Users", "description": "People who use the todo app" }
+  ],
+  "roles": [
+    {
+      "name": "User",
+      "description": "Adds, views and completes their own todos.",
+      "stories": ["F1.1", "F1.2", "F1.3", "F1.4"],
+      "grants": ["todos:read", "todos:create", "todos:complete"],
+      "assignTo": ["Todo Users"]
+    }
+  ],
+  "testUsers": [
+    { "username": "test-user", "roles": ["User"] },
+    { "username": "test-user-2", "roles": ["User"] }
+  ]
+}
