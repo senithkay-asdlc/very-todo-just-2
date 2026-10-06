@@ -7,11 +7,54 @@
   "appPath": "todo-api",
   "entrypoint": "deployment/service",
   "exposure": "internet",
-  "dependencies": [
-    { "kind": "platform-resource", "name": "todo-db", "resourceType": "postgres-cnpg", "description": "Stores each user's todos (title, done flag, owner, creation time)." },
-    { "kind": "platform-resource", "name": "user-auth", "resourceType": "thunder-app", "description": "Sign-in client; the gateway validates tokens issued for it." }
+  "stories": [
+    "F1.1",
+    "F1.2",
+    "F1.3",
+    "F1.4"
   ],
   "description": "The single backend: creates a todo, lists the caller's todos newest first, and marks one done (final). Every row is scoped to the signed-in caller taken from the gateway assertion. Owns the todo database; deploys separately from the browser app because it holds the data. Does not issue tokens, edit or delete todos.",
-  "stories": ["F1.1", "F1.2", "F1.3", "F1.4"],
-  "skillsPinned": ["openapi-conventions", "ballerina", "thunder-authentication", "api-management"]
+  "dependencies": [
+    {
+      "kind": "platform-resource",
+      "name": "todo-db",
+      "description": "Stores each user's todos (title, done flag, owner, creation time).",
+      "resourceType": "postgres-cnpg",
+      "wiring": {
+        "ref": "very-todo-just-2-todo-db",
+        "envBindings": {
+          "dbname": "TODO_DB_DBNAME",
+          "host": "TODO_DB_HOST",
+          "password": "TODO_DB_PASSWORD",
+          "port": "TODO_DB_PORT",
+          "user": "TODO_DB_USER"
+        }
+      }
+    },
+    {
+      "kind": "platform-resource",
+      "name": "user-auth",
+      "description": "Sign-in client; the gateway validates tokens issued for it.",
+      "resourceType": "thunder-app",
+      "wiring": {
+        "ref": "very-todo-just-2-user-auth",
+        "envBindings": {
+          "client_id": "USER_AUTH_CLIENT_ID",
+          "issuer": "USER_AUTH_ISSUER",
+          "jwks_url": "USER_AUTH_JWKS_URL",
+          "resource": "USER_AUTH_RESOURCE",
+          "scopes": "USER_AUTH_SCOPES"
+        }
+      }
+    }
+  ],
+  "exposesAPI": {
+    "auth": "end-user-required"
+  },
+  "skillsPinned": [
+    "openapi-conventions",
+    "ballerina",
+    "thunder-authentication",
+    "api-management"
+  ]
 }
